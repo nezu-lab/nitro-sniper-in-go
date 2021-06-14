@@ -1,12 +1,27 @@
 package main
 import (
-"fmt"
 "time"
 "math/rand"
 "os"
-"strconv"
+"net/http"
 "github.com/fatih/color"
 )
+
+func check(code string) {
+	file, err := os.Create("nitro.txt")
+	if err != nil {return}
+	defer file.Close()
+	Red, Green := color.New(color.FgRed), color.New(color.FgGreen)
+	r, err := http.Get("https://discord.com/api/v6/entitlements/gift-codes/"+code+"?with_application=false&with_subscription_plan=true")
+	if err != nil {return}
+	if r.StatusCode == 20 {
+		Green.Println("[VALID] -> https://discord.gift/"+code)
+		file.WriteString("https://discord.gift/"+code+"\n")
+
+	} else {
+		Red.Println("[INVALID] -> https://discord.gift/"+code)
+	}
+}
 
 var chars = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890")
 func nitro(n int) string {
@@ -18,20 +33,8 @@ func nitro(n int) string {
 }
 
 func main() {
-        var n int
-        file, err := os.Create("nitro.txt")
-        if err != nil {return}
-        defer file.Close()
-        c := color.New(color.FgCyan)
-        c2 := color.New(color.FgMagenta)
-        rand.Seed(time.Now().UnixNano())
-        c.Print("How many nitro codes >>> ")
-        fmt.Scanln(&n)
-        for i := 1;i <= n;i++ {
-                c2.Print("["+strconv.Itoa(i)+"] --> ")
-                code := "https://discord.gg/"+nitro(16)
-                color.Yellow(code)
-                file.WriteString(code+"\n")
-        }
-        color.Green("all the codes were written in 'nitro.txt'")
+	rand.Seed(time.Now().UnixNano())
+	for true {
+		check(nitro(16))
+	}
 }
