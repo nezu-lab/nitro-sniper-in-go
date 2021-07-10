@@ -34,7 +34,7 @@ func nitro(n int) string {
 
 func main() {
 	rand.Seed(time.Now().UnixNano())
-	for true {
+	for {
 		check(nitro(16))
 	}
 }
