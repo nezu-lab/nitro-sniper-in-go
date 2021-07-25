@@ -14,7 +14,7 @@ func check(code string) {
 	Red, Green := color.New(color.FgRed), color.New(color.FgGreen)
 	r, err := http.Get("https://discord.com/api/v6/entitlements/gift-codes/"+code+"?with_application=false&with_subscription_plan=true")
 	if err != nil {return}
-	if r.StatusCode == 20 {
+	if r.StatusCode == 200 {
 		Green.Println("[VALID] -> https://discord.gift/"+code)
 		file.WriteString("https://discord.gift/"+code+"\n")
 
